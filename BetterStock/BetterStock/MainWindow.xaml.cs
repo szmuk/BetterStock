@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Win32;
 
 namespace BetterStock
@@ -17,6 +18,8 @@ namespace BetterStock
             InitializeComponent();
 
             this.Stop.IsEnabled = false;
+
+            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
         }
         
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -60,6 +63,13 @@ namespace BetterStock
                 string file = dlg.FileName;
                 this.FilePath.Text = file;
             }
+        }
+
+        void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            string errorMessage = string.Format("Error occurred: {0}", e.Exception.Message);
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            e.Handled = true;
         }
     }
 }

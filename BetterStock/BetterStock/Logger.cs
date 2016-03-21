@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Windows;
 
 namespace BetterStock
 {
@@ -12,11 +13,20 @@ namespace BetterStock
         {
             var input = PrepareData(data);
 
-            using (var file = new StreamWriter(filePath, true))
+            try
             {
-                file.WriteLine(input);
+                using (var file = new StreamWriter(filePath, true))
+                {
+                    file.WriteLine(input);
 
-                file.Close();
+                    file.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = string.Format("Error occurred: {0}", ex.Message);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BetterStock
 {
@@ -60,20 +61,31 @@ namespace BetterStock
         {
             var values = new StockValues();
 
-            var asd = new WebClient();
-            htmlOutput = asd.DownloadString(StooqAddr);
-            
-            values.Wig = GetValue(WigId);
+            var wc = new WebClient();
 
-            values.Wig20 = GetValue(Wig20Id);
+            try
+            {
+                htmlOutput = wc.DownloadString(StooqAddr);
 
-            values.Wig20Fut = GetValue(Wig20FutId);
+                values.Wig = GetValue(WigId);
 
-            values.Wig20Usd = GetValue(Wig20UsdId);
+                values.Wig20 = GetValue(Wig20Id);
 
-            values.MWig40 = GetValue(MWig40Id);
-            
-            values.SWig80 = GetValue(SWig80Id);
+                values.Wig20Fut = GetValue(Wig20FutId);
+
+                values.Wig20Usd = GetValue(Wig20UsdId);
+
+                values.MWig40 = GetValue(MWig40Id);
+
+                values.SWig80 = GetValue(SWig80Id);
+            }
+            catch (WebException ex)
+            {
+
+                string errorMessage = string.Format("Error occurred: {0}", ex.Message);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
 
             return values;
         }
